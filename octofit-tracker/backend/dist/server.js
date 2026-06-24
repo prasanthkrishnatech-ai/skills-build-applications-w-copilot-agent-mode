@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
-const apiBaseUrl_1 = require("./config/apiBaseUrl");
 const database_1 = require("./config/database");
 const activities_1 = __importDefault(require("./routes/activities"));
 const leaderboard_1 = __importDefault(require("./routes/leaderboard"));
@@ -18,10 +17,14 @@ const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 const port = Number(process.env.PORT) || 8000;
+const codespaceName = process.env.CODESPACE_NAME;
+const apiBaseUrl = codespaceName
+    ? `https://${codespaceName}-8000.app.github.dev`
+    : `http://localhost:${port}`;
 app.get('/api/health', (_req, res) => {
     res.status(200).json({
         status: 'ok',
-        apiBaseUrl: (0, apiBaseUrl_1.getApiBaseUrl)(),
+        apiBaseUrl,
     });
 });
 app.use('/api/users', users_1.default);
@@ -33,7 +36,7 @@ const startServer = async () => {
     try {
         await (0, database_1.connectToDatabase)();
         app.listen(port, () => {
-            console.log(`API listening at ${(0, apiBaseUrl_1.getApiBaseUrl)()}`);
+            console.log(`API listening at ${apiBaseUrl}`);
         });
     }
     catch (error) {

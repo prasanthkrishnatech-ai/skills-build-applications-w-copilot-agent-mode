@@ -1,7 +1,6 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import { getApiBaseUrl } from './config/apiBaseUrl';
 import { connectToDatabase } from './config/database';
 import activitiesRouter from './routes/activities';
 import leaderboardRouter from './routes/leaderboard';
@@ -17,11 +16,15 @@ app.use(cors());
 app.use(express.json());
 
 const port = Number(process.env.PORT) || 8000;
+const codespaceName = process.env.CODESPACE_NAME;
+const apiBaseUrl = codespaceName
+  ? `https://${codespaceName}-8000.app.github.dev`
+  : `http://localhost:${port}`;
 
 app.get('/api/health', (_req, res) => {
   res.status(200).json({
     status: 'ok',
-    apiBaseUrl: getApiBaseUrl(),
+    apiBaseUrl,
   });
 });
 
@@ -36,7 +39,7 @@ const startServer = async (): Promise<void> => {
     await connectToDatabase();
 
     app.listen(port, () => {
-      console.log(`API listening at ${getApiBaseUrl()}`);
+      console.log(`API listening at ${apiBaseUrl}`);
     });
   } catch (error) {
     console.error('Failed to start server', error);

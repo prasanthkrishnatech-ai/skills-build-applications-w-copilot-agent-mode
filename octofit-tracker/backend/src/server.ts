@@ -1,8 +1,8 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import mongoose from 'mongoose';
 import { getApiBaseUrl } from './config/apiBaseUrl';
+import { connectToDatabase } from './config/database';
 import activitiesRouter from './routes/activities';
 import leaderboardRouter from './routes/leaderboard';
 import teamsRouter from './routes/teams';
@@ -17,10 +17,6 @@ app.use(cors());
 app.use(express.json());
 
 const port = Number(process.env.PORT) || 8000;
-const mongoPort = Number(process.env.MONGO_PORT) || 27017;
-const mongoHost = process.env.MONGO_HOST || 'localhost';
-const mongoDatabase = process.env.MONGO_DB_NAME || 'octofit_db';
-const mongoUri = process.env.MONGODB_URI || `mongodb://${mongoHost}:${mongoPort}/${mongoDatabase}`;
 
 app.get('/api/health', (_req, res) => {
   res.status(200).json({
@@ -37,8 +33,7 @@ app.use('/api/workouts', workoutsRouter);
 
 const startServer = async (): Promise<void> => {
   try {
-    await mongoose.connect(mongoUri);
-    console.log(`MongoDB connected: ${mongoUri}`);
+    await connectToDatabase();
 
     app.listen(port, () => {
       console.log(`API listening at ${getApiBaseUrl()}`);

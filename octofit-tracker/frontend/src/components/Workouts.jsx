@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 
-const getApiBaseUrl = () => {
+const getWorkoutsApiUrl = () => {
   const codespaceName = import.meta.env.VITE_CODESPACE_NAME
   return codespaceName
-    ? `https://${codespaceName}-8000.app.github.dev/api`
-    : 'http://localhost:8000/api'
+    ? `https://${codespaceName}-8000.app.github.dev/api/workouts`
+    : 'http://localhost:8000/api/workouts'
 }
 
 const normalizeItems = (payload) => {
@@ -21,7 +21,7 @@ function Workouts() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  const endpoint = useMemo(() => `${getApiBaseUrl()}/workouts/`, [])
+  const endpoint = useMemo(() => getWorkoutsApiUrl(), [])
 
   useEffect(() => {
     const controller = new AbortController()

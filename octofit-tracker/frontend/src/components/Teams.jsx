@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 
-const getApiBaseUrl = () => {
+const getTeamsApiUrl = () => {
   const codespaceName = import.meta.env.VITE_CODESPACE_NAME
   return codespaceName
-    ? `https://${codespaceName}-8000.app.github.dev/api`
-    : 'http://localhost:8000/api'
+    ? `https://${codespaceName}-8000.app.github.dev/api/teams`
+    : 'http://localhost:8000/api/teams'
 }
 
 const normalizeItems = (payload) => {
@@ -21,7 +21,7 @@ function Teams() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  const endpoint = useMemo(() => `${getApiBaseUrl()}/teams/`, [])
+  const endpoint = useMemo(() => getTeamsApiUrl(), [])
 
   useEffect(() => {
     const controller = new AbortController()

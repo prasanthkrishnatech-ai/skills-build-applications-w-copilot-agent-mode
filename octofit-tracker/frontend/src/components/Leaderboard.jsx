@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from 'react'
 
-const getApiBaseUrl = () => {
+const getLeaderboardApiUrl = () => {
   const codespaceName = import.meta.env.VITE_CODESPACE_NAME
   return codespaceName
-    ? `https://${codespaceName}-8000.app.github.dev/api`
-    : 'http://localhost:8000/api'
+    ? `https://${codespaceName}-8000.app.github.dev/api/leaderboard`
+    : 'http://localhost:8000/api/leaderboard'
 }
 
 const normalizeItems = (payload) => {
@@ -21,7 +21,7 @@ function Leaderboard() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
-  const endpoint = useMemo(() => `${getApiBaseUrl()}/leaderboard/`, [])
+  const endpoint = useMemo(() => getLeaderboardApiUrl(), [])
 
   useEffect(() => {
     const controller = new AbortController()

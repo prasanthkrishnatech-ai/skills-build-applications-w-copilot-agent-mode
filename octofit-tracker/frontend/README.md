@@ -1,16 +1,35 @@
-# React + Vite
+# OctoFit Tracker Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This frontend uses React 19 with Vite and react-router-dom to navigate between:
 
-Currently, two official plugins are available:
+- Users
+- Teams
+- Activities
+- Leaderboard
+- Workouts
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Environment variable setup
 
-## React Compiler
+Define `VITE_CODESPACE_NAME` in `.env.local` so the app can build Codespaces API URLs:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+VITE_CODESPACE_NAME=your-codespace-name
+```
 
-## Expanding the ESLint configuration
+The frontend builds API endpoints in this format when `VITE_CODESPACE_NAME` is set:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```text
+https://${VITE_CODESPACE_NAME}-8000.app.github.dev/api/[component]/
+```
+
+Safe fallback behavior is included. If `VITE_CODESPACE_NAME` is unset, the app uses localhost:
+
+```text
+http://localhost:8000/api/[component]/
+```
+
+## Run the app
+
+```bash
+npm run dev
+```
